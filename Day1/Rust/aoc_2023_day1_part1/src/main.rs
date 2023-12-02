@@ -3,7 +3,7 @@ use std::io::{self, BufRead};
 use std::path::Path;
 
 fn main() -> io::Result<()>{
-    let path = Path::new("inputPart1.txt");
+    let path = Path::new("input.txt");
     let input = File::open(path)?;
     let buffered = io::BufReader::new(input);
 

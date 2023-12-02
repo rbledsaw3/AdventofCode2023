@@ -19,5 +19,5 @@ def process_file(file_path):
 
     return sum(process_line(line) for line in lines)
 
-total_sum = process_file('inputPart1.txt')
+total_sum = process_file('input.txt')
 print(f"Total sum: {total_sum}")

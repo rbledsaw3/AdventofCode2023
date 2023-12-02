@@ -50,4 +50,4 @@ function processFile(filePath) {
     }
     console.log(`Total sum: ${sum}`);
 }
-processFile('inputPart1.txt');
+processFile('input.txt');

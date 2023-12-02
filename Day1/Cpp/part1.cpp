@@ -4,7 +4,7 @@
 #include <string>
 
 int main() {
-  std::ifstream input("inputPart1.txt");
+  std::ifstream input("input.txt");
   std::string line;
   int sum = 0;
   const int TENS = 10;
