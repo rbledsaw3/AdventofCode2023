@@ -4,7 +4,7 @@
 #include <string>
 
 int main() {
-  std::ifstream input("input.txt");
+  std::ifstream input("inputDay1.txt");
   std::string line;
   int sum = 0;
   const int TENS = 10;

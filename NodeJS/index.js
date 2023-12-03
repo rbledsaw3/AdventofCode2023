@@ -2,7 +2,7 @@ const fs = require('fs');
 const readline = require('readline');
 
 async function processFilePart1() {
-    const fileStream = fs.createReadStream('input.txt');
+    const fileStream = fs.createReadStream('inputDay1.txt');
     const rl = readline.createInterface({
         input: fileStream,
         crlfDelay: Infinity
@@ -84,7 +84,7 @@ function processLine(line) {
     return (firstNumber !== -1 && lastNumber !== -1) ? `${firstNumber}${lastNumber}` : '';
 }
 
-fs.readFile('input.txt', 'utf8', (err, data) => {
+fs.readFile('inputDay1.txt', 'utf8', (err, data) => {
     if (err) {
         console.error('Error reading file:', err);
         return;

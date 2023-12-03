@@ -33,4 +33,4 @@ function processFile(filePath: string) {
     console.log(`Total sum: ${sum}`);
 }
 
-processFile('input.txt');
+processFile('inputDay1.txt');
