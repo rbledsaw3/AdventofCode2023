@@ -70,14 +70,11 @@ int main() {
   }
 
   while (getline(input, line)) {
-    std::cout << line << std::endl;
     std::string processedLine = processLine(line);
-    std::cout << processedLine << std::endl;
 
     if (!processedLine.empty()) {
       sum += std::stoi(processedLine);
     }
-    std::cout << sum << std::endl;
   }
 
   input.close();
