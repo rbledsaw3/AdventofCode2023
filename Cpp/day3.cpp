@@ -73,40 +73,95 @@ std::vector<std::pair<int, int>>
 // {123, 456, 789}
 std::vector<int> get_continuous_numbers(const std::vector<std::pair<int, int>>& adjacent_indices,
                                         const std::vector<std::string>& lines) {
-    std::set<
-        std::pair<
-            std::pair<int, int>,
-            int
-        >
-    > unique_numbers;
-    std::vector<int> continuous_numbers;
+  std::set<std::pair<std::pair<int, int>, int>> unique_numbers;
+  std::vector<int> continuous_numbers;
 
-    for (const auto& pair : adjacent_indices) {
-        int row = pair.first;
-        int col = pair.second;
+  for (const auto& pair : adjacent_indices) {
+    int row = pair.first;
+    int col = pair.second;
 
-        while (col > 0 && isdigit(lines[row][col - 1]) == 1) {
-            col--;
+    while (col > 0 && isdigit(lines[row][col - 1]) == 1) {
+      col--;
+    }
+
+    int start_col = col;
+
+    std::string number;
+
+    while (col < lines[row].size() && isdigit(lines[row][col]) == 1) {
+      number += lines[row][col];
+      col++;
+    }
+
+    if (!number.empty()) {
+      int num = std::stoi(number);
+      auto inserted = unique_numbers.insert({
+        {row, start_col},
+        num
+      });
+      if (inserted.second) {
+        continuous_numbers.push_back(num);
+      }
+    }
+  }
+  return continuous_numbers;
+}
+
+std::vector<int> get_adjacent_numbers(const int& row, const int& col, const std::vector<std::string>& lines) {
+    std::vector<int> adjacent_numbers;
+    std::set<std::pair<int, int>> processed_starts; // To avoid processing the same number multiple times
+
+    std::vector<std::pair<int, int>> directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}, {-1, -1}, {-1, 1}, {1, -1}, {1, 1}};
+    for (const auto& direction : directions) {
+        int new_row = row + direction.first;
+        int new_col = col + direction.second;
+
+        // Check bounds
+        if (new_row < 0 || new_row >= lines.size() || new_col < 0 || new_col >= lines[new_row].size()) {
+            continue;
         }
 
-        int start_col = col;
+        // Check if the adjacent cell is a digit and hasn't been processed
+        if (isdigit(lines[new_row][new_col]) == 1 && processed_starts.count({new_row, new_col}) == 0) {
+            // Find the start of the number
+            while (new_col > 0 && isdigit(lines[new_row][new_col - 1]) == 1) {
+                new_col--;
+            }
 
-        std::string number;
+            // Check if this start has already been processed
+            if (processed_starts.insert({new_row, new_col}).second) {
+                std::string number;
 
-        while (col < lines[row].size() && isdigit(lines[row][col]) == 1) {
-            number += lines[row][col];
-            col++;
-        }
+                // Collect the entire number
+                while (new_col < lines[new_row].size() && isdigit(lines[new_row][new_col]) == 1) {
+                    number += lines[new_row][new_col];
+                    new_col++;
+                }
 
-        if (!number.empty()) {
-            int num = std::stoi(number);
-            auto inserted = unique_numbers.insert({{row, start_col}, num});
-            if (inserted.second) {
-                continuous_numbers.push_back(num);
+                if (!number.empty()) {
+                    adjacent_numbers.push_back(std::stoi(number));
+                }
             }
         }
     }
-  return continuous_numbers;
+    return adjacent_numbers;
+}
+
+
+long calculate_gear_ratios(const std::vector<std::string>& lines) {
+    long sum_gear_ratios { 0 };
+
+    for (int row = 0; row < lines.size(); ++row) {
+        for (int col = 0; col < lines[row].size(); ++col) {
+            if (lines[row][col] == '*') {
+                std::vector<int> adjacent_numbers = get_adjacent_numbers(row, col, lines);
+                if (adjacent_numbers.size() == 2) {
+                    sum_gear_ratios += static_cast<long>(adjacent_numbers[0]) * adjacent_numbers[1];
+                }
+            }
+        }
+    }
+    return sum_gear_ratios;
 }
 
 int main(int argc, char* argv[]) {
@@ -137,6 +192,10 @@ int main(int argc, char* argv[]) {
     sum += *it;
   }
   std::cout << sum << std::endl;
+
+  std::cout << "Part 2: Calculating gear ratios..." << std::endl;
+  long sum_gear_ratios = calculate_gear_ratios(lines);
+  std::cout << "Sum of all gear ratios: " << sum_gear_ratios << std::endl;
 
   return 0;
 }
